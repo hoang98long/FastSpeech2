@@ -126,16 +126,6 @@ def synthesize_wav(model, step, configs, vocoder, batchs, control_values):
                 e_control=energy_control,
                 d_control=duration_control
             )
-            # for wav_file in synth_wav(
-            #     batch,
-            #     output,
-            #     vocoder,
-            #     model_config,
-            #     preprocess_config,
-            #     train_config["path"]["result_path"],
-            #     ):
-            #     print(f"Reference done: {wav_file}")
-                # yield wav_file
             wav_files += synth_wav(
                 batch,
                 output,
