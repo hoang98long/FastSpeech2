@@ -1,8 +1,8 @@
 import yaml
 from .utils.tools import synth_wav
-from .utils.model import get_model, get_vocoder
+# from .utils.model import get_model, get_vocoder
 # from .model.fastspeech2 import FastSpeech2
-from fastspeech2_model import FastSpeech2
+# from fastspeech2_model import FastSpeech2
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
 import logging
 from utils.tools import to_device
@@ -19,12 +19,12 @@ logger = logging.getLogger(__name__)
 
 try:
     preprocess_config = yaml.load(
-        open('./config/Viet_tts/preprocess.yaml', "r"), Loader=yaml.FullLoader
+        open('preprocess.yaml', "r"), Loader=yaml.FullLoader
     )
     model_config = yaml.load(
-        open('./config/Viet_tts/model.yaml', "r"), Loader=yaml.FullLoader)
+        open('model.yaml', "r"), Loader=yaml.FullLoader)
     train_config = yaml.load(
-        open('./config/Viet_tts/train.yaml', "r"), Loader=yaml.FullLoader)
+        open('train.yaml', "r"), Loader=yaml.FullLoader)
     configs = (preprocess_config, model_config, train_config)
     print(f"Configs loaded!")
 except Exception as e:
@@ -57,18 +57,20 @@ class FastSpeech2Synthesizer(BaseHandler):
             "cuda" if torch.cuda.is_available() else "cpu")
         args = Args()
         # self.model = get_model(args, configs, self.device, train=False)
-        self.model = FastSpeech2(
-            preprocess_config, model_config).to(self.device)
+        # self.model = FastSpeech2(
+        #     preprocess_config, model_config).to(self.device)
 
-        ckpt_path = os.path.join(train_config["path"]["ckpt_path"], "{}.pth.tar".format(args.restore_step),)
-        if not os.path.isfile(ckpt_path):
-            print(f"Load checkpoint failed! {ckpt_path}")
-            raise Exception(f"ckpt file not existed {ckpt_path}")
-        ckpt = torch.load(ckpt_path)
-        self.model.load_state_dict(ckpt["model"])
+        # ckpt_path = os.path.join(train_config["path"]["ckpt_path"], "{}.pth.tar".format(args.restore_step),)
+        # if not os.path.isfile(ckpt_path):
+        #     print(f"Load checkpoint failed! {ckpt_path}")
+        #     raise Exception(f"ckpt file not existed {ckpt_path}")
+        # ckpt = torch.load(ckpt_path)
+        # self.model.load_state_dict(ckpt["model"])
+        self.model = torch.load('../fastspeech2.pth')
+        self.vocoder = torch.load('../vocoder.pth')
         print(f"FastSpeech2 Loaded successfully!")
-        self.vocoder = get_vocoder(model_config, self.device)
         self.model.eval()
+        self.vocoder.eval()
         logger.debug("FastSpeech2 model file loaded successfully!")
         self.initialized = True
 
