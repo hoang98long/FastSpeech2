@@ -127,6 +127,14 @@ The loss curves, synthesized mel-spectrograms, and audios are shown.
 ![](./img/tensorboard_loss.png)
 ![](./img/tensorboard_spec.png)
 ![](./img/tensorboard_audio.png)
+# Serve
+```bash
+ torch-model-archiver --model-name fastspeech2_synthesizer --version 1.0 \
+               --model-file fastspeech2_model.py \
+               --serialized-file ./output/ckpt/viet-tts/30000.pth.tar \
+               --handler fastspeech2_handler.py \
+               --extra-files utils/tools.py,utils/model.py,transformer/Models.py,transformer/Layers.py
+```
 
 # Implementation Issues
 
