@@ -28,6 +28,7 @@ try:
     configs = (preprocess_config, model_config, train_config)
     print(f"Configs loaded!")
 except Exception as e:
+    print(f"Load configuration failed!")
     raise e
 
 
@@ -61,6 +62,7 @@ class FastSpeech2Synthesizer(BaseHandler):
 
         ckpt_path = os.path.join(train_config["path"]["ckpt_path"], "{}.pth.tar".format(args.restore_step),)
         if not os.path.isfile(ckpt_path):
+            print(f"Load checkpoint failed! {ckpt_path}")
             raise Exception(f"ckpt file not existed {ckpt_path}")
         ckpt = torch.load(ckpt_path)
         self.model.load_state_dict(ckpt["model"])
