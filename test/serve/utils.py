@@ -6,7 +6,6 @@ import time
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)
 #%%
 headers = {
   'Content-Type': 'application/json'

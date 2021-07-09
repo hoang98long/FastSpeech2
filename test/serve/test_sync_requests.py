@@ -9,7 +9,9 @@ import time
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
+
+formater = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 c_handler = logging.StreamHandler()
 f_handler = logging.FileHandler('sync_request.log')
 
