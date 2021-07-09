@@ -3,16 +3,17 @@ import requests
 import pytest
 import json
 from utils import read_data, url, log_request, headers
-
+import random
 from typing import Any, Dict
 import time
 #%%
 
 # @pytest.mark.skip()
-@log_request
+@log_request()
 def get(payloads)-> Any:
-    payloads = list(map( json.dumps, payloads))
-    # response = requests.request("GET", url, headers=headers, data=payload)
+    payloads = list(map( lambda x: json.dumps({'text': x}), payloads))
+    # print(f"Reading data")
+    print(payloads[0])
     responses = [ requests.request('GET', url, headers=headers, data=p) for p in payloads ]
     # return response.content
     return responses
@@ -20,8 +21,12 @@ def get(payloads)-> Any:
 
 
 def test_request():
+    # print('Inside test sync request')
+    # import pdb; pdb.set_tra()
     payloads = read_data()
-    responses = get(payloads)
+    random.shuffle(payloads)
+    for _ in range(10):
+        responses = get(payloads)
 
 
 
