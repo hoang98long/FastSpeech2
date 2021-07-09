@@ -9,6 +9,12 @@ import time
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+c_handler = logging.StreamHandler()
+f_handler = logging.FileHandler('sync_request.log')
+
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
 #%%
 
 # @pytest.mark.skip()
