@@ -8,7 +8,7 @@ from typing import Any, Dict
 import time
 #%%
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 @log_request
 def get(payloads)-> Any:
     payloads = list(map( json.dumps, payloads))
@@ -19,7 +19,7 @@ def get(payloads)-> Any:
 
 
 
-def run():
+def test_request():
     payloads = read_data()
     responses = get(payloads)
 
@@ -27,11 +27,12 @@ def run():
 
     
 if __name__ == '__main__':
-    payloads = read_data()
-    n = len(payloads)
-    _start = time.time()
-    for payload in payloads:
-        transfer(payload)
+    pass
+    # payloads = read_data()
+    # n = len(payloads)
+    # _start = time.time()
+    # for payload in payloads:
+    #     test(payload)
     
     _end = time.time()
 
