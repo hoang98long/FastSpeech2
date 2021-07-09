@@ -37,6 +37,7 @@ def log_request(type:str = 'sync'):
             _end = get_time()
             avg_time = (_end-_start)/len(payloads)
             _end_mess = f"Request done with {avg_time}s/payload"
+            # print(_end_mess)
             logger.info(_end_mess)
             return responses
         return wrapper

@@ -8,7 +8,7 @@ from typing import Any, Dict
 import time
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 logger.setLevel(logging.WARNING)
 
 formater = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
