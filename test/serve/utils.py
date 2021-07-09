@@ -4,6 +4,9 @@ from typing import List, Any
 import requests
 import time
 #%%
+headers = {
+  'Content-Type': 'application/json'
+}
 url = "http://183.91.2.4:4097/tts/generate"
 try:
     cur_dir = os.path.dirname(__file__)
@@ -24,9 +27,9 @@ def log_request(type:str = 'sync'):
     def wrapper(f, payloads: List[Any], *args, **kwargs):
 
         _start = get_time()
-        response = f(payloads)
+        responses= f(payloads)
         _end = get_time()
         avg_time = (_end-_start)/len(payloads)
 
-        return response
+        return responses
     return wrapper
