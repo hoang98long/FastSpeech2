@@ -3,21 +3,14 @@ import uvicorn
 app = FastAPI()
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel
-import re
 import argparse
-from string import punctuation
 
 import torch
 import yaml
 import numpy as np
-from torch.utils.data import DataLoader
-from g2p_en import G2p
-from pypinyin import pinyin, Style
 
 from utils.model import get_model, get_vocoder
 from utils.tools import to_device, synth_samples, synth_wav
-from dataset import TextDataset
-from text import text_to_sequence
 import time
 
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
@@ -35,6 +28,7 @@ configs = (preprocess_config, model_config, train_config)
 
 class Args:
     restore_step = 3000
+
 args = Args()
 
 class Item(BaseModel):
