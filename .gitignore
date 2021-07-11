@@ -118,3 +118,4 @@ TextGrid/
 hifigan/*.pth.tar
 preprocessed_data/*
 *.mar
+**/viet-tts-lexicon.txt
