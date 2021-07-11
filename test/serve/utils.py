@@ -12,7 +12,7 @@ headers = {
   'Content-Type': 'application/json'
 }
 # url = "http://183.91.2.4:4097/tts/generate"
-url = "http://0.0.0.0:80/tts/generate"
+url = "http://127.0.0.1:80/tts/generate"
 try:
     cur_dir = os.path.dirname(__file__)
 except:
