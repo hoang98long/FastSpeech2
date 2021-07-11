@@ -31,8 +31,9 @@ def test_request():
     payloads = read_data()
     random.shuffle(payloads)
     payloads = list(map( lambda x: json.dumps({'text': x}), payloads))
-    for _ in range(10):
-        responses = send(payloads)
+    # for _ in range(10):
+    #     responses = send(payloads)
+    responses = send(payloads)
 
 
 

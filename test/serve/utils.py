@@ -21,7 +21,7 @@ def read_data(fpath: str = os.path.join(cur_dir, './data.txt')):
     assert os.path.isfile(fpath)
     with open(fpath, 'r') as fr:
         data = fr.read().strip().split('\n')
-    return data[:10]
+    return data[:50]
 
 def log_request(is_async=False):
     if not is_async:
