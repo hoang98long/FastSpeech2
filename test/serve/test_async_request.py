@@ -33,5 +33,5 @@ async def send_multiple(payloads: List):
 def test_async():
     payloads = read_data()
     random.shuffle(payloads)
-    payloads = list(map( lambda x: json.dumps({'text': x}), payloads))
+    payloads = list(map( lambda x: {'text': x}, payloads))
     asyncio.run(send_multiple(payloads))

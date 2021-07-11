@@ -6,6 +6,7 @@ import random
 from typing import Any, Dict
 import logging
 
+logging.getLogger('requests').disabled = True
 logger = logging.getLogger()
 logger.setLevel(logging.WARNING)
 

@@ -1,7 +1,6 @@
 #%%
 import os
 from typing import List, Any, Callable
-import requests
 import time
 import logging
 from functools import wraps
@@ -32,19 +31,30 @@ def log_request(is_async=False):
 
     def decorator(func: Callable):
         @wraps(func)
-        async def wrapper(payloads: List[Any], *args, **kwargs):
+        def sync_wrapper(payloads: List[Any], *args, **kwargs):
             _start_mess = f'Requesting {len(payloads)} payloads'
             logger.info(_start_mess)
             _start = get_time()
-            if is_async:
-                responses = await func(payloads)
-            else:
-                responses = func(payloads)
+            responses = func(payloads)
             _end = get_time()
             avg_time = (_end-_start)/len(payloads)
             _end_mess = f"Request done with {avg_time}s/payload"
             # print(_end_mess)
             logger.info(_end_mess)
             return responses
+
+        @wraps(func)
+        async def async_wrapper(payloads: List[Any], *args, **kwargs):
+            _start_mess = f'Requesting {len(payloads)} payloads'
+            logger.info(_start_mess)
+            _start = get_time()
+            responses = await func(payloads)
+            _end = get_time()
+            avg_time = (_end-_start)/len(payloads)
+            _end_mess = f"Request done with {avg_time}s/payload"
+            # print(_end_mess)
+            logger.info(_end_mess)
+            return responses
+        wrapper = async_wrapper if is_async else sync_wrapper
         return wrapper
     return decorator
