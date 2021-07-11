@@ -24,11 +24,10 @@ def read_data(fpath: str = os.path.join(cur_dir, './data.txt')):
         data = fr.read().strip().split('\n')
     return data[:]
 
-def log_request(type:str = 'sync'):
-    assert type in ['sync', 'async']
-    if type == 'sync':
+def log_request(async=False):
+    if not async:
         get_time = time.time
-    elif type == 'async':
+    else :
         get_time = time.perf_counter
 
     def decorator(func: Callable):
@@ -37,7 +36,7 @@ def log_request(type:str = 'sync'):
             _start_mess = f'Requesting {len(payloads)} payloads'
             logger.info(_start_mess)
             _start = get_time()
-            if type == 'async':
+            if async:
                 responses = await func(payloads)
             else:
                 responses = func(payloads)
