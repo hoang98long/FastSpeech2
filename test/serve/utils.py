@@ -24,8 +24,8 @@ def read_data(fpath: str = os.path.join(cur_dir, './data.txt')):
         data = fr.read().strip().split('\n')
     return data[:]
 
-def log_request(async=False):
-    if not async:
+def log_request(is_async=False):
+    if not is_async:
         get_time = time.time
     else :
         get_time = time.perf_counter
@@ -36,7 +36,7 @@ def log_request(async=False):
             _start_mess = f'Requesting {len(payloads)} payloads'
             logger.info(_start_mess)
             _start = get_time()
-            if async:
+            if is_async:
                 responses = await func(payloads)
             else:
                 responses = func(payloads)

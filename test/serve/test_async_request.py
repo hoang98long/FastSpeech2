@@ -18,7 +18,7 @@ async def send(payload, session: ClientSession, **kwargs):
 
 # TODO: for large content 
 #   resp.content.read(chunk_size)
-@log_request(async=True)
+@log_request(is_async=True)
 async def send_multiple(payloads: List):
     async with ClientSession() as session:
         tasks = []
