@@ -9,7 +9,7 @@ import asyncio
 # Not save response data yet!
 async def send(payload, session: ClientSession, **kwargs):
     resp = await session.request(method='GET', url=url, json=payload, **kwargs)
-    resp.raise_for_status()
+    # resp.raise_for_status()
     return resp
 
 # TODO:: methods load the whole response in memory 
