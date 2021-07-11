@@ -1,11 +1,9 @@
 #%%
 import requests
-import pytest
 import json
 from utils import read_data, url, log_request, headers
 import random
 from typing import Any, Dict
-import time
 import logging
 
 logger = logging.getLogger()
@@ -21,8 +19,7 @@ logger.addHandler(f_handler)
 
 # @pytest.mark.skip()
 @log_request()
-def get(payloads)-> Any:
-    payloads = list(map( lambda x: json.dumps({'text': x}), payloads))
+def send(payloads)-> Any:
     responses = [ requests.request('GET', url, headers=headers, data=p) for p in payloads ]
     # return response.content
     return responses
@@ -32,12 +29,14 @@ def test_request():
     # import pdb; pdb.set_tra()
     payloads = read_data()
     random.shuffle(payloads)
+    payloads = list(map( lambda x: json.dumps({'text': x}), payloads))
     for _ in range(10):
-        responses = get(payloads)
+        responses = send(payloads)
 
 
 
     
 if __name__ == '__main__':
+    test_request()
     pass
 
