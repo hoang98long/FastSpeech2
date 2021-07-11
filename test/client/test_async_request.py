@@ -26,7 +26,6 @@ async def send_multiple(payloads: List):
             tasks.append(
                     send(payload, session=session)
                     )
-        
         await asyncio.gather(*tasks)
     pass
 

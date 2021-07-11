@@ -47,7 +47,6 @@ def log_request(is_async=False):
         async def async_wrapper(payloads: List[Any], *args, **kwargs):
             _start_mess = f'Requesting {len(payloads)} payloads'
             logger.info(_start_mess)
-            print(_start_mess)
             _start = get_time()
             responses = await func(payloads)
             _end = get_time()
@@ -55,7 +54,6 @@ def log_request(is_async=False):
             _end_mess = f"Request done with {avg_time}s/payload"
             # print(_end_mess)
             logger.info(_end_mess)
-            print(_end_mess)
             return responses
         wrapper = async_wrapper if is_async else sync_wrapper
         return wrapper
