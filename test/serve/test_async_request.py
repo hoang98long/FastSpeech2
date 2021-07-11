@@ -8,7 +8,7 @@ import asyncio
 
 # Not save response data yet!
 async def send(payload, session: ClientSession, **kwargs):
-    resp = await session.request(method='GET', url=url, data=payload, **kwargs)
+    resp = await session.request(method='GET', url=url, json=payload, **kwargs)
     resp.raise_for_status()
     return resp
 
@@ -18,7 +18,7 @@ async def send(payload, session: ClientSession, **kwargs):
 
 # TODO: for large content 
 #   resp.content.read(chunk_size)
-@log_request()
+@log_request(type='async')
 async def send_multiple(payloads: List):
     async with ClientSession() as session:
         tasks = []

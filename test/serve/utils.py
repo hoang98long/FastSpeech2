@@ -38,9 +38,9 @@ def log_request(type:str = 'sync'):
             logger.info(_start_mess)
             _start = get_time()
             if type == 'async':
-                responses = func(payloads)
-            else:
                 responses = await func(payloads)
+            else:
+                responses = func(payloads)
             _end = get_time()
             avg_time = (_end-_start)/len(payloads)
             _end_mess = f"Request done with {avg_time}s/payload"
