@@ -5,6 +5,7 @@ from utils import pickle
 from utils import shared_memory as sm
 import torch.multiprocessing as mp
 import threading
+import time
 
 QUEUE_SIZE = mp.Value('i', 0)
 TOPIC = 'snaptravel'
@@ -41,6 +42,7 @@ def send_prediction(message, result_publisher, topic=TOPIC):
 
   predict = prediction_functions.get(model_name)
   f = sm.function_wrapper(predict)
+  time.sleep(2.)
   result = sm.run_function(f, *body)
 
   if result.get('error'):
@@ -103,9 +105,7 @@ def start():
 
   print('Server started')
   while True:
-    print('Inside worker loop')
     message = _parse_recv_for_json(work_subscriber.recv())
-    print('New thread created!')
     threading.Thread(target=send_prediction, args=(message, result_publisher), kwargs={'topic': TOPIC}).start()
 
 if __name__ == '__main__':

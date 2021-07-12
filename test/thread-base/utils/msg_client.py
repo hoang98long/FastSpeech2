@@ -52,7 +52,6 @@ def get(id, topic=TOPIC):
   if result.get('error'):
     raise Exception(result['error_msg'])
 
-  print(f"Client get reponse done, return {result['prediction']}")
   return result['prediction']
 
 
