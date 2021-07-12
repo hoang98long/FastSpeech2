@@ -11,7 +11,6 @@ import numpy as np
 
 from utils.model import get_model, get_vocoder
 from utils.tools import to_device, synth_samples, synth_wav
-import time
 
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
