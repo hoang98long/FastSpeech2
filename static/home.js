@@ -6,7 +6,7 @@ function sendText() {
         'text': document.getElementById("fname").value
     });
     // text_data = document.getElementById("fname").value
-    console.log(json_item);
+    // console.log(json_item);
     var URL = "http://183.91.2.4:4097/tts/generate";
     $.ajax({
         type: "POST",
@@ -14,9 +14,11 @@ function sendText() {
         data: json_item, 
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
+        responseType: 'arraybuffer',
         success: function(response) {
             data = new Unit8Array(response);
-            console.log(data);
+            console.log(length(data));
+            $('#audio_src'.attr('src', data))
             return data;
         }
     });
