@@ -7,7 +7,7 @@ function sendText() {
     });
     // text_data = document.getElementById("fname").value
     console.log(json_item);
-    var URL = "http://127.0.0.1:80/tts/generate";
+    var URL = "http://183.91.2.4:4097/tts/generate";
     $.ajax({
         type: "get",
         url: URL,
