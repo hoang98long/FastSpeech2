@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import uvicorn
 import yaml
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
@@ -15,7 +15,7 @@ from utils.tools import synth_samples, synth_wav, to_device
 
 app = FastAPI()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+from fastapi.templating import Jinja2Templates
 origins = [
         '*'
         ]
@@ -35,7 +35,7 @@ preprocess_config = yaml.load(
 model_config = yaml.load(open('./config/Viet_tts/model.yaml', "r"), Loader=yaml.FullLoader)
 train_config = yaml.load(open('./config/Viet_tts/train.yaml', "r"), Loader=yaml.FullLoader)
 configs = (preprocess_config, model_config, train_config)
-
+templates = Jinja2Templates(directory="templates")
 # Get model
 
 class Args:
@@ -53,7 +53,7 @@ vocoder = get_vocoder(model_config, device)
 restore_step = 5000
 control_values = 1., 1., 1.
 @app.get("/tts/generate")
-async def root(item: Item):
+async def root(request:Request, item: Item):
     text = item.text
     ids = raw_texts = text
     speakers = np.array([0])
@@ -65,7 +65,8 @@ async def root(item: Item):
     batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
     for wav_file in synthesize_wav(model, restore_step, configs, vocoder, batchs, control_values):
         break
-    return FileResponse(wav_file)
+    # return FileResponse(wav_file)
+    return templates.TemplateResponse("item.html", {"request": request})
     # wav_stream = open(wav_file, mode='rb')
     # return StreamingResponse(wav_stream, media_type="video/mp4")
 	# return {"message": "Hello World"}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="./home.css">
+    <script src="./home.js"></script>
+    <script src="./jquery/jquery-3.6.0.js"></script>
+    <script src="./jquery/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+    <h2>Test text to speech</h2>
+
+    <form action="#" onsubmit="sendText()" id="test_form">
+        <label for="fname" id="test_label" class="form1">Input text:</label><br>
+        <textarea id="fname" name="" rows="10" cols="200"></textarea> <br>
+        <input type="submit" class="form1" value="Submit">
+    </form>
+
+    <div>
+        <h2>Result</h2>
+        <div id="result_wav">
+            <audio controls>
+                <source id="audio_src" src="" type="audio/mpeg">
+                <!-- <source id="audio_src" src="test.mp3" type="audio/mpeg"> -->
+            </audio>
+        </div>
+        <button id="reload_btn" type="button" onclick="reloadPage()" class="">Reload</button>
+    </div>
+
+
+</body>
+
+</html>
