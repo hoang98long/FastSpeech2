@@ -14,8 +14,10 @@ function sendText() {
         data: json_item, 
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
-        success: function(data) {
+        success: function(response) {
+            data = new Unit8Array(response);
             console.log(data);
+            return data;
         }
     });
     // var xmlHttp = new XMLHttpRequest();
