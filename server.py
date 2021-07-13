@@ -53,6 +53,12 @@ model = get_model(args, configs, device, train=False)
 vocoder = get_vocoder(model_config, device)
 restore_step = 5000
 control_values = 1., 1., 1.
+
+@app.get("/tts")
+async def home(request: Request):
+
+    return templates.TemplateResponse("home.html", {"request": request})
+
 @app.get("/tts/generate")
 async def root(request:Request, item: Item):
     text = item.text
@@ -66,8 +72,7 @@ async def root(request:Request, item: Item):
     batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
     for wav_file in synthesize_wav(model, restore_step, configs, vocoder, batchs, control_values):
         break
-    # return FileResponse(wav_file)
-    return templates.TemplateResponse("home.html", {"request": request})
+    return FileResponse(wav_file)
     # wav_stream = open(wav_file, mode='rb')
     # return StreamingResponse(wav_stream, media_type="video/mp4")
 	# return {"message": "Hello World"}
