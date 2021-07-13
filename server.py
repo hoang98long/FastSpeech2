@@ -8,6 +8,7 @@ import yaml
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
