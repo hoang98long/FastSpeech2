@@ -1,19 +1,32 @@
-from fastapi import FastAPI
-import uvicorn
-app = FastAPI()
-from fastapi.responses import StreamingResponse, FileResponse
-from pydantic import BaseModel
 import argparse
 
-import torch
-import yaml
 import numpy as np
-
-from utils.model import get_model, get_vocoder
-from utils.tools import to_device, synth_samples, synth_wav
+import torch
+import uvicorn
+import yaml
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, StreamingResponse
+from pydantic import BaseModel
 
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
+from utils.model import get_model, get_vocoder
+from utils.tools import synth_samples, synth_wav, to_device
+
+app = FastAPI()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+origins = [
+        '*'
+        ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Read Config
 preprocess_config = yaml.load(
