@@ -14,13 +14,14 @@ from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
 from utils.model import get_model, get_vocoder
 from utils.tools import synth_samples, synth_wav, to_device
 
-app = FastAPI()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from fastapi.templating import Jinja2Templates
 origins = [
         '*'
         ]
 
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -29,6 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+templates = Jinja2Templates(directory="templates")
+
 # Read Config
 preprocess_config = yaml.load(
     open( './config/Viet_tts/preprocess.yaml', "r"), Loader=yaml.FullLoader
@@ -36,7 +39,6 @@ preprocess_config = yaml.load(
 model_config = yaml.load(open('./config/Viet_tts/model.yaml', "r"), Loader=yaml.FullLoader)
 train_config = yaml.load(open('./config/Viet_tts/train.yaml', "r"), Loader=yaml.FullLoader)
 configs = (preprocess_config, model_config, train_config)
-templates = Jinja2Templates(directory="templates")
 # Get model
 
 class Args:
