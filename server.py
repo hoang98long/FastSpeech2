@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="static")
 
 # Read Config
 preprocess_config = yaml.load(
