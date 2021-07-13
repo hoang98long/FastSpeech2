@@ -75,8 +75,9 @@ async def root(request:Request, item: Item):
     for wav_file in synthesize_wav(model, restore_step, configs, vocoder, batchs, control_values):
         break
     return FileResponse(wav_file)
+
     # wav_stream = open(wav_file, mode='rb')
-    # return StreamingResponse(wav_stream, media_type="video/mp4")
+    return StreamingResponse(wav_stream, media_type="audio/mpeg")
 	# return {"message": "Hello World"}
 if __name__ == '__main__':
     uvicorn.run(app, port=80, host='0.0.0.0', debug=True)
