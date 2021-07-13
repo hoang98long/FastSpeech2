@@ -61,7 +61,7 @@ control_values = 1., 1., 1.
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
-@app.get("/tts/generate")
+@app.post("/tts/generate")
 async def root(request:Request, item: Item):
     text = item.text
     ids = raw_texts = text

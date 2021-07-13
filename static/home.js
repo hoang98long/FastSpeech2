@@ -9,10 +9,11 @@ function sendText() {
     console.log(json_item);
     var URL = "http://183.91.2.4:4097/tts/generate";
     $.ajax({
-        type: "get",
+        type: "POST",
         url: URL,
         data: json_item, 
         dataType: 'json',
+        contentType: "application/json; charset=utf-8",
         success: function(data) {
             console.log(data);
         }
