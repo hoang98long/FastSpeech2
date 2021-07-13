@@ -59,7 +59,6 @@ control_values = 1., 1., 1.
 
 @app.get("/tts")
 async def home(request: Request):
-
     return templates.TemplateResponse("home.html", {"request": request})
 
 @app.get("/tts/generate")
