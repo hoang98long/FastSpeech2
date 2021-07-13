@@ -2,18 +2,16 @@ function sendText() {
     /* var item = {
         'text': document.getElementById("fname").value
     } */
-    /* var json_item = JSON.stringify({
+    var json_item = JSON.stringify({
         'text': document.getElementById("fname").value
-    }); */
+    });
     // text_data = document.getElementById("fname").value
-    // console.log(json_item);
-    var form = new FormData();
-    form.append('text': document.getElementById("fname").value)
+    console.log(json_item);
     var URL = "http://183.91.2.4:4097/tts/generate";
     $.ajax({
         type: "get",
         url: URL,
-        data: form, 
+        data: json_item, 
         dataType: 'json',
         success: function(data) {
             console.log(data);
