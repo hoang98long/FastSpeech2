@@ -1,6 +1,9 @@
 from torch import nn
 import torch
 # import yaml
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
 from utils.model import get_model, get_vocoder
 import numpy as np
 from synthesize import preprocess_english

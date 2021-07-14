@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from utils import msg_client as mc
+from misc import msg_client as mc
 import uvicorn
 import random
 

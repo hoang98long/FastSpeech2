@@ -1,8 +1,8 @@
 import os
 from types import SimpleNamespace
 import zmq.green as zmq
-from utils import pickle
-from utils import shared_memory as sm
+from misc import pickle
+from misc import shared_memory as sm
 import torch.multiprocessing as mp
 import threading
 import time
@@ -16,7 +16,7 @@ NUM_MODEL = 5
 
 import yaml
 # Read Config
-pre_path = '../../'
+pre_path = ''
 preprocess_config = yaml.load(
     open(os.path.join(pre_path,  './config/Viet_tts/preprocess.yaml'), "r"), Loader=yaml.FullLoader
 )
@@ -25,7 +25,7 @@ train_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/train.ya
 
 
 import sys
-sys.path.insert(1, '../../')
+sys.path.insert(1, '')
 from e2e_model import E2E
 
 class Args:
