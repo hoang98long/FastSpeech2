@@ -12,6 +12,23 @@ TOPIC = 'snaptravel'
 prediction_functions = {}
 RECEIVE_PORT = os.getenv("RECEIVE_PORT")
 SEND_PORT = os.getenv("SEND_PORT")
+NUM_MODEL = 5
+
+import yaml
+# Read Config
+pre_path = '../../'
+preprocess_config = yaml.load(
+    open(os.path.join(pre_path,  './config/Viet_tts/preprocess.yaml'), "r"), Loader=yaml.FullLoader
+)
+model_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/model.yaml'), "r"), Loader=yaml.FullLoader)
+train_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/train.yaml'), "r"), Loader=yaml.FullLoader)
+from e2e_model import E2E
+
+class Args:
+    restore_step = 50000
+
+args = Args()
+restore_step = args.restore_step
 
 def _parse_recv_for_json(result, topic=TOPIC):
   print(f"Inside parse json, {result}")
@@ -77,6 +94,7 @@ def load_models():
   #   archive.model.share_memory()
   #   predictor = Predictor.from_archive(archive, 'model')
   #   return predictor
+  models = {f'model-{i:02d}': E2E(args, preprocess_config, model_config, train_config) for i in range(NUM_MODEL)}
   return models
 
 def start():
@@ -85,12 +103,17 @@ def start():
   
   models = load_models()
   
+  # prediction_functions = {
+  #   # This is where you would add your models for inference
+  #   # For example, 'model1': model.model1.predict,
+  #   #              'model2': model.model2.predict,
+  #   'queue': queue_size
+  # }
+
   prediction_functions = {
-    # This is where you would add your models for inference
-    # For example, 'model1': model.model1.predict,
-    #              'model2': model.model2.predict,
-    'queue': queue_size
-  }
+          f"model-{i:02d}": models[f"model-{i:02d}"].forward for i in range(NUM_MODEL)
+          }
+  prediction_functions['queue'] = queue_size
 
   print(f'Connecting to {RECEIVE_PORT} in server')
   context = zmq.Context()

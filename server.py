@@ -52,10 +52,8 @@ class Args:
 args = Args()
 
 
-model = get_model(args, configs, device, train=False)
-
-# Load vocoder
-vocoder = get_vocoder(model_config, device)
+# model = get_model(args, configs, device, train=False)
+# vocoder = get_vocoder(model_config, device)
 restore_step = Args.restore_step
 control_values = 1., 1., 1.
 
@@ -64,6 +62,7 @@ async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 e2e = E2E(args, preprocess_config, model_config, train_config)
+
 @app.post("/tts/generate")
 async def root(request:Request, item: Item):
     text = item.text
