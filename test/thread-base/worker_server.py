@@ -1,3 +1,6 @@
+from e2e_model import E2E
+import sys
+import yaml
 import os
 from types import SimpleNamespace
 import zmq.green as zmq
@@ -7,6 +10,7 @@ import torch.multiprocessing as mp
 import threading
 import time
 
+import multiprocessing as mp
 QUEUE_SIZE = mp.Value('i', 0)
 TOPIC = 'snaptravel'
 prediction_functions = {}
@@ -14,39 +18,44 @@ RECEIVE_PORT = os.getenv("RECEIVE_PORT")
 SEND_PORT = os.getenv("SEND_PORT")
 NUM_MODEL = 5
 
-import yaml
 # Read Config
 pre_path = ''
 preprocess_config = yaml.load(
     open(os.path.join(pre_path,  './config/Viet_tts/preprocess.yaml'), "r"), Loader=yaml.FullLoader
 )
-model_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/model.yaml'), "r"), Loader=yaml.FullLoader)
-train_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/train.yaml'), "r"), Loader=yaml.FullLoader)
+model_config = yaml.load(open(os.path.join(
+    pre_path, './config/Viet_tts/model.yaml'), "r"), Loader=yaml.FullLoader)
+train_config = yaml.load(open(os.path.join(
+    pre_path, './config/Viet_tts/train.yaml'), "r"), Loader=yaml.FullLoader)
 
 
-import sys
 sys.path.insert(1, '')
-from e2e_model import E2E
+
 
 class Args:
     restore_step = 50000
 
+
 args = Args()
 restore_step = args.restore_step
+
 
 def _parse_recv_for_json(result, topic=TOPIC):
   print(f"Inside parse json, {result}")
   compressed_json = result[len(topic) + 1:]
   return pickle.decompress(compressed_json)
 
+
 def _decrease_queue():
   with QUEUE_SIZE.get_lock():
     QUEUE_SIZE.value -= 1
 
+
 def _increase_queue():
   with QUEUE_SIZE.get_lock():
     QUEUE_SIZE.value += 1
-    
+
+
 def send_prediction(message, result_publisher, topic=TOPIC):
   _increase_queue()
 
@@ -56,7 +65,8 @@ def send_prediction(message, result_publisher, topic=TOPIC):
   id = message['id']
 
   if not model_name:
-    compressed_message = pickle.compress({'error': True, 'error_msg': 'Model doesn\'t exist', 'id': id})
+    compressed_message = pickle.compress(
+        {'error': True, 'error_msg': 'Model doesn\'t exist', 'id': id})
     result_publisher.send(f'{topic} '.encode('utf8') + compressed_message)
     _decrease_queue()
     return
@@ -67,13 +77,15 @@ def send_prediction(message, result_publisher, topic=TOPIC):
   result = sm.run_function(f, *body)
 
   if result.get('error'):
-    compressed_message = pickle.compress({'error': True, 'error_msg': result['error'], 'id': id})
+    compressed_message = pickle.compress(
+        {'error': True, 'error_msg': result['error'], 'id': id})
     result_publisher.send(f'{topic} '.encode('utf8') + compressed_message)
     _decrease_queue()
     return
 
   if result.get('result') is None:
-    compressed_message = pickle.compress({'error': True, 'error_msg': 'No result was given: ' + str(result), 'id': id})
+    compressed_message = pickle.compress(
+        {'error': True, 'error_msg': 'No result was given: ' + str(result), 'id': id})
     result_publisher.send(f'{topic} '.encode('utf8') + compressed_message)
     _decrease_queue()
     return
@@ -84,29 +96,33 @@ def send_prediction(message, result_publisher, topic=TOPIC):
   result_publisher.send(f'{topic} '.encode('utf8') + compressed_message)
   _decrease_queue()
 
+
 def queue_size():
   return QUEUE_SIZE.value
+
 
 def load_models():
   models = SimpleNamespace()
   # This is where you load your models
   # For example, model.model1 = model1.load_model()
   # where
-  # `model1.py` has 
+  # `model1.py` has
   # def load_model():
   #   archive = load_archive(SERIALIZATION_DIR)
   #   archive.model.share_memory()
   #   predictor = Predictor.from_archive(archive, 'model')
   #   return predictor
-  models = {f'model-{i:02d}': E2E(args, preprocess_config, model_config, train_config) for i in range(NUM_MODEL)}
+  models = {f'model-{i:02d}': E2E(args, preprocess_config,
+                                  model_config, train_config) for i in range(NUM_MODEL)}
   return models
+
 
 def start():
   print('Worker started')
   global prediction_functions
-  
+
   models = load_models()
-  
+
   # prediction_functions = {
   #   # This is where you would add your models for inference
   #   # For example, 'model1': model.model1.predict,
@@ -133,7 +149,10 @@ def start():
   print('Server started')
   while True:
     message = _parse_recv_for_json(work_subscriber.recv())
-    threading.Thread(target=send_prediction, args=(message, result_publisher), kwargs={'topic': TOPIC}).start()
+    threading.Thread(target=send_prediction, args=(
+        message, result_publisher), kwargs={'topic': TOPIC}).start()
+
 
 if __name__ == '__main__':
+  mp.set_start_method('spawn')
   start()
