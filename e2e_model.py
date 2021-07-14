@@ -36,7 +36,7 @@ class E2E(nn.Module):
                 e_control=energy_control,
                 d_control=duration_control
             )
-            wav_file = synth_wav(
+            wav_files = synth_wav(
                 batch,
                 output,
                 self.vocoder,
@@ -45,4 +45,4 @@ class E2E(nn.Module):
                 self.train_config["path"]["result_path"],
                 )
     # print(f"Reference done after {time.time()-_start}")
-        return wav_file
+        return wav_files[0]
