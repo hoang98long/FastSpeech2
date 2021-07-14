@@ -4,6 +4,7 @@ import zmq.green as zmq
 from misc import pickle
 from misc import shared_memory as sm
 import torch.multiprocessing as mp
+mp.set_start_method('spawn')
 import threading
 import time
 
@@ -137,5 +138,4 @@ def start():
     threading.Thread(target=send_prediction, args=(message, result_publisher), kwargs={'topic': TOPIC}).start()
 
 if __name__ == '__main__':
-  mp.set_start_method('spawn')
   start()
