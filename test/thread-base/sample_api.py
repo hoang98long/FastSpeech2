@@ -42,7 +42,7 @@ async def root(request: Request, item: Item):
     i = random.randint(0, 4)
     model_name = f"model-{i:02d}"
     # wav_file = e2e(text)
-    
+    wav_file = mc.send_and_get(text, model=model_name) 
 
     return FileResponse(wav_file)
 

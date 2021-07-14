@@ -3,7 +3,7 @@ import uuid
 
 import zmq.green as zmq # required since we are in gevents
 
-from utils import pickle
+from misc import pickle
 import os
 
 work_publisher = None
