@@ -22,6 +22,10 @@ preprocess_config = yaml.load(
 )
 model_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/model.yaml'), "r"), Loader=yaml.FullLoader)
 train_config = yaml.load(open(os.path.join(pre_path, './config/Viet_tts/train.yaml'), "r"), Loader=yaml.FullLoader)
+
+
+import sys
+sys.path.insert(1, '../../')
 from e2e_model import E2E
 
 class Args:
