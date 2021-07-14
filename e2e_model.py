@@ -17,11 +17,12 @@ class E2E(nn.Module):
         # Load vocoder
         self.vocoder = get_vocoder(model_config, device)
         self.train_config = train_config
+        self.model_config = model_config
 
     def forward(self, text):
         pitch_control, energy_control, duration_control = control_values
         ids = raw_texts = text
-        texts = np.array([preprocess_english(text, preprocess_config)])
+        texts = np.array([preprocess_english(text, self.preprocess_config)])
         speakers = np.array([0])
         text_lens = np.array([len(texts[0])])
         batch = (ids, raw_texts, speakers, texts, text_lens, max(text_lens))
