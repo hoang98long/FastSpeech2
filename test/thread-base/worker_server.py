@@ -35,6 +35,20 @@ class Args:
 
 args = Args()
 restore_step = args.restore_step
+def load_models():
+  models = SimpleNamespace()
+  # This is where you load your models
+  # For example, model.model1 = model1.load_model()
+  # where
+  # `model1.py` has 
+  # def load_model():
+  #   archive = load_archive(SERIALIZATION_DIR)
+  #   archive.model.share_memory()
+  #   predictor = Predictor.from_archive(archive, 'model')
+  #   return predictor
+  models = {f'model-{i:02d}': E2E(args, preprocess_config, model_config, train_config) for i in range(NUM_MODEL)}
+  return models
+models = load_models()
 
 def _parse_recv_for_json(result, topic=TOPIC):
   print(f"Inside parse json, {result}")
@@ -89,25 +103,12 @@ def send_prediction(message, result_publisher, topic=TOPIC):
 def queue_size():
   return QUEUE_SIZE.value
 
-def load_models():
-  models = SimpleNamespace()
-  # This is where you load your models
-  # For example, model.model1 = model1.load_model()
-  # where
-  # `model1.py` has 
-  # def load_model():
-  #   archive = load_archive(SERIALIZATION_DIR)
-  #   archive.model.share_memory()
-  #   predictor = Predictor.from_archive(archive, 'model')
-  #   return predictor
-  models = {f'model-{i:02d}': E2E(args, preprocess_config, model_config, train_config) for i in range(NUM_MODEL)}
-  return models
 
 def start():
   print('Worker started')
   global prediction_functions
-  
-  models = load_models()
+  global models
+  # models = load_models()
   
   # prediction_functions = {
   #   # This is where you would add your models for inference
