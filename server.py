@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from synthesize import preprocess_english, preprocess_mandarin, synthesize_wav
 from utils.model import get_model, get_vocoder
 from utils.tools import synth_samples, synth_wav, to_device
+from e2e_model import E2E
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from fastapi.templating import Jinja2Templates
@@ -33,6 +34,9 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory="static")
 
+class Item(BaseModel):
+    text: str
+
 # Read Config
 preprocess_config = yaml.load(
     open( './config/Viet_tts/preprocess.yaml', "r"), Loader=yaml.FullLoader
@@ -47,36 +51,39 @@ class Args:
 
 args = Args()
 
-class Item(BaseModel):
-    text: str
 
 model = get_model(args, configs, device, train=False)
 
 # Load vocoder
 vocoder = get_vocoder(model_config, device)
-restore_step = 5000
+restore_step = Args.restore_step
 control_values = 1., 1., 1.
 
 @app.get("/tts")
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
+e2e = E2E(args, preprocess_config, model_config, train_config)
 @app.post("/tts/generate")
 async def root(request:Request, item: Item):
     text = item.text
-    ids = raw_texts = text
-    speakers = np.array([0])
-    if preprocess_config["preprocessing"]["text"]["language"] == "en":
-        texts = np.array([preprocess_english(text, preprocess_config)])
-    elif preprocess_config["preprocessing"]["text"]["language"] == "zh":
-        texts = np.array([preprocess_mandarin(text, preprocess_config)])
-    text_lens = np.array([len(texts[0])])
-    batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
-    for wav_file in synthesize_wav(model, restore_step, configs, vocoder, batchs, control_values):
-        break
-    return FileResponse(wav_file)
+    # ids = raw_texts = text
+    # speakers = np.array([0])
+    # texts = np.array([preprocess_english(text, preprocess_config)])
+    # if preprocess_config["preprocessing"]["text"]["language"] == "en":
+    #     texts = np.array([preprocess_english(text, preprocess_config)])
 
-    # wav_stream = open(wav_file, mode='rb')
+    # text_lens = np.array([len(texts[0])])
+    # batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
+
+    # for wav_file in synthesize_wav(model, restore_step, configs, vocoder, batchs, control_values):
+    #     break
+
+    wav_file = e2e(text)
+
+    # return FileResponse(wav_file)
+
+    wav_stream = open(wav_file, mode='rb')
     return StreamingResponse(wav_stream, media_type="audio/mpeg")
 	# return {"message": "Hello World"}
 if __name__ == '__main__':
