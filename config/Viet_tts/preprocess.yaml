@@ -8,7 +8,7 @@ path:
 
 preprocessing:
 # default 512
-  val_size: 10
+  val_size: 512
   text:
     text_cleaners: ["vietnamese_cleaners"]
     language: "en"
