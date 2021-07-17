@@ -94,9 +94,6 @@ class FastSpeech2(nn.Module):
             e_control,
             d_control,
         )
-        # except Exception as e:
-        #     print(f"Error with VarianceAdapter {texts} {src_masks}")
-        #     raise e
 
         output, mel_masks = self.decoder(output, mel_masks)
         output = self.mel_linear(output)
