@@ -1,7 +1,7 @@
 dataset: "viet_tts"
 
 path:
-  corpus_path: "../data/mps"
+  corpus_path: "../data/"
   lexicon_path: "./lexicon/viet-tts-lexicon.txt"
   raw_path: "./raw_data"
   preprocessed_path: "./preprocessed_data"
