@@ -5,10 +5,11 @@ Defines the set of symbols used in text input to the model.
 
 The default is a set of ASCII characters that works well for English or text that has been run through Unidecode. For other data, you can modify _characters. See TRAINING_DATA.md for details. """
 
+# from string import punctuation
 from text import cmudict, pinyin
 
 _pad = "_"
-_punctuation = "!'(),.:;? "
+_punctuation = '  !"\'(),-.:;?[]{}'
 _special = "-"
 _letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 _silences = ["@sp", "@spn", "@sil"]
@@ -37,4 +38,5 @@ _vie_phones = ['a', 'ai', 'am', 'an', 'ang', 'anh', 'ao', 'au', 'ay', 'b', 'c', 
 # symbols = list(set(_ipa))
 
 # My Vie phonemes
-symbols = list(_vie_phones)
+symbols = list(_vie_phones) + list(_punctuation)
+
