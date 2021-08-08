@@ -1,7 +1,7 @@
 path:
-  ckpt_path: "./output/ckpt/viet-tts"
-  log_path: "./output/log/viet-tts"
-  result_path: "./output/result/viet-tts"
+  ckpt_path: "./output/ckpt/vlsp2017"
+  log_path: "./output/log/vlsp2017"
+  result_path: "./output/result/vlsp2017"
 optimizer:
   batch_size: 64
   betas: [0.9, 0.98]
