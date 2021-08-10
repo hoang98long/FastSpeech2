@@ -18,7 +18,8 @@ class FastSpeech2(nn.Module):
         self.model_config = model_config
 
         self.encoder = Encoder(model_config)
-        self.variance_adaptor = VarianceAdaptor(preprocess_config, model_config)
+        self.variance_adaptor = VarianceAdaptor(
+            preprocess_config, model_config)
         self.decoder = Decoder(model_config)
         self.mel_linear = nn.Linear(
             model_config["transformer"]["decoder_hidden"],
@@ -65,10 +66,10 @@ class FastSpeech2(nn.Module):
         # try:
         output = self.encoder(texts, src_masks)
         # except Exception as e:
-            # print(f"Error when encoding {texts}, {src_masks}")
-            # raise e
+        # print(f"Error when encoding {texts}, {src_masks}")
+        # raise e
 
-        # try: 
+        # try:
         if self.speaker_emb is not None:
             output = output + self.speaker_emb(speakers).unsqueeze(1).expand(
                 -1, max_src_len, -1
