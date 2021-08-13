@@ -34,6 +34,6 @@ multi_speaker: False
 max_seq_len: 600
 
 vocoder:
-  model: "HiFi-GAN" # support 'HiFi-GAN', 'MelGAN'
+  model: "MelGAN" # support 'HiFi-GAN', 'MelGAN'
   speaker: "LJSpeech" # support  'LJSpeech', 'universal'
 
