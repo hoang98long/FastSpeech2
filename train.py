@@ -84,8 +84,8 @@ def main(args, configs):
                 try:
                     output = model(*(batch[2:]))
                 except Exception as e:
-                    logging.error(f"Model failed with {batch[0]}")
-                    # raise e
+                    logging.error(f"{batch[0]}")
+                    raise e
                     continue
                 # Cal Loss
                 losses = Loss(batch, output)
