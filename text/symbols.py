@@ -38,5 +38,5 @@ _vie_phones = ['a', 'ai', 'am', 'an', 'ang', 'anh', 'ao', 'au', 'ay', 'b', 'c', 
 # symbols = list(set(_ipa))
 
 # My Vie phonemes
-# symbols = list(_vie_phones) + list(_punctuation)
+# symbols = list(_vie_phones) + list(_punctuation) # mfa alignment not involved punctuation 
 symbols = list(_vie_phones)

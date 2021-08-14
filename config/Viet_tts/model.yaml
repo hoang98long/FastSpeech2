@@ -30,10 +30,9 @@ variance_embedding:
 
 multi_speaker: False
 
-max_seq_len: 1000
-# max_seq_len: 600
+# max_seq_len: 1000
+max_seq_len: 500
 
 vocoder:
-  model: "MelGAN" # support 'HiFi-GAN', 'MelGAN'
-  speaker: "LJSpeech" # support  'LJSpeech', 'universal'
-
+  model: "HiFi-GAN" # support 'HiFi-GAN', 'MelGAN'
+  speaker: "universal" # support  'LJSpeech', 'universal'
