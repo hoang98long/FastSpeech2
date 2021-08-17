@@ -84,12 +84,12 @@ class Preprocessor:
                         info, pitch, energy, n = ret
                     out.append(info)
 
-                # if 'pitch' in locals() and len(pitch) > 0:
-                    pitch_scaler.partial_fit(pitch.reshape((-1, 1)))
-                # if 'energy' in locals() and len(energy) > 0:
-                    energy_scaler.partial_fit(energy.reshape((-1, 1)))
+                    if 'pitch' in locals() and len(pitch) > 0:
+                        pitch_scaler.partial_fit(pitch.reshape((-1, 1)))
+                    if 'energy' in locals() and len(energy) > 0:
+                        energy_scaler.partial_fit(energy.reshape((-1, 1)))
 
-                # if 'n' in locals():
+                    # if 'n' in locals():
                     n_frames += n
 
         print("Computing statistic quantities ...")
