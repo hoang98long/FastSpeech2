@@ -12,7 +12,7 @@ _id_to_symbol = {i: s for i, s in enumerate(symbols)}
 _curly_re = re.compile(r"(.*?)\{(.+?)\}(.*)")
 
 
-def text_to_sequence(text, cleaner_names):
+def text_to_sequence(text, cleaner_names, phone_code='ipa'):
     """Converts a string of text to a sequence of IDs corresponding to the symbols in the text.
 
     The text can optionally have ARPAbet sequences enclosed in curly braces embedded
@@ -25,9 +25,11 @@ def text_to_sequence(text, cleaner_names):
     Returns:
       List of integers corresponding to the symbols in the text
     """
+    assert phone_code in ['ipa', 'arpabet']
     sequence = []
 
     # Check for curly braces and treat their contents as ARPAbet:
+
     while len(text):
         m = _curly_re.match(text)
 
@@ -35,11 +37,16 @@ def text_to_sequence(text, cleaner_names):
             sequence += _symbols_to_sequence(_clean_text(text, cleaner_names))
             break
         sequence += _symbols_to_sequence(_clean_text(m.group(1), cleaner_names))
-        sequence += _arpabet_to_sequence(m.group(2))
+        if phone_code == 'ipa':
+            sequence += _ipa_to_sequence(m.group(2))
+        else:
+            sequence += _arpabet_to_sequence(m.group(2))
         text = m.group(3)
 
     return sequence
 
+def _ipa_to_sequence(text):
+    return _symbols_to_sequence([s for s in text.split()])
 
 def sequence_to_text(sequence):
     """Converts a sequence of IDs back to a string"""

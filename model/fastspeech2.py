@@ -62,9 +62,13 @@ class FastSpeech2(nn.Module):
             if mel_lens is not None
             else None
         )
-
+        # try:
         output = self.encoder(texts, src_masks)
+        # except Exception as e:
+            # print(f"Error when encoding {texts}, {src_masks}")
+            # raise e
 
+        # try: 
         if self.speaker_emb is not None:
             output = output + self.speaker_emb(speakers).unsqueeze(1).expand(
                 -1, max_src_len, -1
@@ -90,6 +94,9 @@ class FastSpeech2(nn.Module):
             e_control,
             d_control,
         )
+        # except Exception as e:
+        #     print(f"Error with VarianceAdapter {texts} {src_masks}")
+        #     raise e
 
         output, mel_masks = self.decoder(output, mel_masks)
         output = self.mel_linear(output)

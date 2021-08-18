@@ -1,8 +1,9 @@
 import argparse
 
 import yaml
-
-from preprocessor import ljspeech, aishell3, libritts
+import sys
+sys.path.insert(1, '/content/FastSpeech2')
+from preprocessor import ljspeech, aishell3, libritts, viet_tts
 
 
 def main(config):
@@ -12,6 +13,8 @@ def main(config):
         aishell3.prepare_align(config)
     if "LibriTTS" in config["dataset"]:
         libritts.prepare_align(config)
+    if 'viet_tts' in config["dataset"]:
+        viet_tts.prepare_align(config)
 
 
 if __name__ == "__main__":

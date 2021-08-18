@@ -14,6 +14,8 @@ from model import FastSpeech2Loss
 from dataset import Dataset
 
 from evaluate import evaluate
+import logging
+logging.basicConfig(filename='./train_log.txt', level=logging.ERROR)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -33,7 +35,7 @@ def main(args, configs):
     loader = DataLoader(
         dataset,
         batch_size=batch_size * group_size,
-        shuffle=True,
+        shuffle=True, # for bug fixing
         collate_fn=dataset.collate_fn,
     )
 
@@ -79,8 +81,12 @@ def main(args, configs):
                 batch = to_device(batch, device)
 
                 # Forward
-                output = model(*(batch[2:]))
-
+                try:
+                    output = model(*(batch[2:]))
+                except Exception as e:
+                    logging.error(f"Model failed with {batch[0]}")
+                    # raise e
+                    continue
                 # Cal Loss
                 losses = Loss(batch, output)
                 total_loss = losses[0]

@@ -103,7 +103,8 @@ to align the corpus and then run the preprocessing script.
 ```
 python3 preprocess.py config/LJSpeech/preprocess.yaml
 ```
-
+### Kaldi Installation (Optional)
+Install gcc 7.3.1 (worked well on CentOs 7(devtoolset-7) and google colab)
 ## Training
 
 Train your model with

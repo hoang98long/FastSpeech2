@@ -15,6 +15,8 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 
 # Regular expression matching whitespace:
 import re
+# from string import punctuation
+punctuation = "!\"#$%&'()*+-/:;<=>?@[\]^_`{|}~"
 from unidecode import unidecode
 from .numbers import normalize_numbers
 _whitespace_re = re.compile(r'\s+')
@@ -39,6 +41,8 @@ _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in 
     ('ltd', 'limited'),
     ('col', 'colonel'),
     ('ft', 'fort'),
+    ('j', 'gi'),
+    ('tnhh', 'trách nhiệm hữu hạn')
 ]]
 
 
@@ -86,4 +90,15 @@ def english_cleaners(text):
     text = expand_numbers(text)
     text = expand_abbreviations(text)
     text = collapse_whitespace(text)
+    return text
+
+def vietnamese_cleaners(text):
+    text = re.sub('['+punctuation+']', ' ', text) # 
+    text = lowercase(text)
+    # text = expand_numbers(text) # TODO: expand vietnamese numbers
+
+    # TODO:Need abbreviation for vietnamese
+    text = expand_abbreviations(text) 
+    text = collapse_whitespace(text)
+    text = text.strip()
     return text
